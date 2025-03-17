@@ -1,0 +1,16 @@
+﻿@using Rise.Shared.Events
+
+<div class="space-y-2">
+    <p><strong>Type:</strong> @Event.Type</p>
+    <p><strong>Genre:</strong> @Event.Genre</p>
+    <p><strong>Speeltijd:</strong> @Event.Duration</p>
+    <p><strong>Regie:</strong> @Event.Director</p>
+    <p><strong>Cast:</strong> @string.Join(", ", Event.Cast)</p>
+    <p><strong>Ondertiteling:</strong> NL/FR </p>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required EventDto Event { get; set; }
+
+}

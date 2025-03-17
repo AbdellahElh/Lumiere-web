@@ -1,0 +1,26 @@
+@* MoviePoster.razor *@
+
+<div class="movie-poster cursor-pointer" @onclick="OnClick">
+    <img src="@ImageUrl" alt="Movie Poster" 
+         class="w-[150px] h-[225px] object-cover" />
+</div>
+
+@code {
+    [Parameter]
+    public string? ImageUrl { get; set; }
+
+    [Parameter]
+    public int MovieId { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPosterClick { get; set; }
+
+    private void OnClick()
+    {
+        if (OnPosterClick.HasDelegate)
+        {
+            OnPosterClick.InvokeAsync(MovieId);
+        }
+    }
+    
+}

@@ -1,0 +1,41 @@
+﻿@using Rise.Client.Movies
+@using Rise.Shared.Movies
+@using Rise.Client.Util
+<div class="w-full h-104 relative overflow-hidden pb-4">
+
+    @if (isVideoVisible)
+    {
+        <iframe class="w-full h-full"
+                src="@Movie.MovieLink?controls=1&autoplay=1&playsinline=1&rel=0"
+                title="Movie video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
+    }
+    else
+    {
+        <div class="relative w-full h-full flex items-center justify-center transition-opacity duration-200 hover:opacity-80" @onclick="PlayVideo">
+            <img src="@Movie.VideoPlaceholderUrl" alt="Video Placeholder" class="w-full h-104 object-cover" />
+
+            <div class="absolute flex items-center justify-center w-16 h-16 cursor-pointer border-4 border-black rounded-full bg-black bg-opacity-50"
+                 @onclick="PlayVideo">
+                <i class="fas fa-play text-white text-4xl transition-transform duration-200 transform hover:scale-110"></i>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+
+    [Parameter, EditorRequired]
+    public required MovieDto Movie { get; set; }
+
+    private bool isVideoVisible = false;
+
+    private void PlayVideo()
+    {
+        isVideoVisible = true;
+    }
+}

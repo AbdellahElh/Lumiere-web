@@ -1,0 +1,149 @@
+[
+  {
+    "Id": 1,
+    "Name": "Inception",
+    "Cover": "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
+    "Genre": "Science Fiction",
+    "Duration": "148 minuten",
+    "Director": "Christopher Nolan",
+    "Description": "Wanneer meester-dromer Dom Cobb (Leonardo DiCaprio) de kans krijgt om zijn verleden achter te laten, krijgt hij de uitdaging van zijn leven: in plaats van ideeën te stelen, moet hij er één planten in het onderbewustzijn van een doelwit. Samen met een team van experts in droomarchitectuur en manipulatie duiken ze in een complexe en gevaarlijke droomwereld. Terwijl de grenzen tussen werkelijkheid en dromen vervagen, worden ze geconfronteerd met hun grootste angsten en de demonen uit het verleden. Zal het ze lukken om de perfecte inceptie uit te voeren, of verliezen ze zichzelf in de diepten van hun eigen creaties?",
+    "Video": "https://www.youtube.com/embed/YoHD9XEInc0",
+    "videoPlaceholderImage": "https://beinglol.com/media/facebook-cover/Inception-Facebook-Covers-554.jpg",
+    "Cast": [ "Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page" ],
+    "Cinemas": [
+      {
+        "Name": "Brugge",
+        "Showtimes": [
+          "2024-10-28T14:00:00",
+          "2024-10-28T17:30:00",
+          "2024-10-28T21:00:00"
+        ]
+      },
+      {
+        "Name": "Antwerpen",
+        "Showtimes": [
+          "2024-10-28T15:00:00",
+          "2024-10-28T18:00:00",
+          "2024-10-28T20:30:00"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "Name": "The Dark Knight",
+    "Cover": "https://musicart.xboxlive.com/7/abb02f00-0000-0000-0000-000000000002/504/image.jpg?w=1920&h=1080",
+    "Genre": "Action",
+    "Duration": "152 minuten",
+    "Director": "Christopher Nolan",
+    "Description": "In Gotham City neemt de criminaliteit weer toe, en de strijd tussen Batman (Christian Bale) en de georganiseerde misdaad bereikt nieuwe hoogtes. Wanneer de sinistere Joker (Heath Ledger) opduikt, brengt hij chaos en vernietiging in de stad. Met zijn onvoorspelbare en gewelddadige methodes test de Joker niet alleen de moraal van Batman, maar bedreigt hij ook de levens van de mensen die Batman probeert te beschermen. Terwijl de situatie escaleert, moet Batman samenwerken met officier van justitie Harvey Dent (Aaron Eckhart) en commissaris Jim Gordon (Gary Oldman) om de Joker te stoppen voordat hij Gotham tot de rand van de afgrond drijft. In een wereld waar goed en kwaad steeds moeilijker te onderscheiden zijn, staat alles op het spel.",
+    "Video": "https://www.youtube.com/embed/EXeTwQWrcwY",
+    "videoPlaceholderImage": "https://live.staticflickr.com/2222/2452159541_23ca8f2df0_b.jpg",
+    "Cast": [ "Christian Bale", "Heath Ledger", "Aaron Eckhart" ],
+    "Cinemas": [
+      {
+        "Name": "Cinema Cartoons",
+        "Showtimes": [
+          "2024-10-28T13:00:00",
+          "2024-10-28T16:30:00",
+          "2024-10-28T20:00:00"
+        ]
+      },
+      {
+        "Name": "Mechelen",
+        "Showtimes": [
+          "2024-10-28T14:15:00",
+          "2024-10-28T18:45:00",
+          "2024-10-28T22:15:00"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "Name": "Interstellar",
+    "Cover": "https://i.pinimg.com/736x/8e/0d/ab/8e0dab8699be85720ce55845065bf6dc.jpg",
+    "Genre": "Adventure",
+    "Duration": "169 minuten",
+    "Director": "Christopher Nolan",
+    "Description": "In een toekomst waarin de aarde in verval is, komt voormalig NASA-piloot Cooper (Matthew McConaughey) in actie om de mensheid te redden. Samen met een team van onderzoekers reist hij door een wormgat op zoek naar een nieuwe bewoonbare planeet. Terwijl ze zich een weg banen door onbekende sterrenstelsels en extreme omstandigheden, wordt Cooper geconfronteerd met de kracht van tijd en de onwrikbare band met zijn dochter Murph (Jessica Chastain), die op aarde blijft. Terwijl de klok tikt, ontdekt het team dat de strijd om te overleven niet alleen een reis door de ruimte is, maar ook een diepgaande zoektocht naar liefde en opoffering.",
+    "Video": "https://www.youtube.com/embed/zSWdZVtXT7E",
+    "videoPlaceholderImage": "https://d5d5yejrba9lo.cloudfront.net/hero-banner-v2-tablet-jpeg/movies/batch/sid_5DE10A14-2D3E-4B3B-B75D-0FA5FCAEC626_0.jpg",
+    "Cast": [ "Matthew McConaughey", "Anne Hathaway", "Jessica Chastain" ],
+    "Cinemas": [
+      {
+        "Name": "Brugge",
+        "Showtimes": [
+          "2024-10-28T12:30:00",
+          "2024-10-28T16:00:00",
+          "2024-10-28T19:30:00"
+        ]
+      },
+      {
+        "Name": "Antwerpen",
+        "Showtimes": [
+          "2024-10-28T15:00:00",
+          "2024-10-28T19:00:00"
+        ]
+      },
+      {
+        "Name": "Cinema Cartoons",
+        "Showtimes": [
+          "2024-10-28T13:45:00",
+          "2024-10-28T17:00:00",
+          "2024-10-28T20:30:00"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "Name": "The Matrix",
+    "Cover": "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_.jpg",
+    "Genre": "Action",
+    "Duration": "136 minuten",
+    "Director": "Lana Wachowski, Lilly Wachowski",
+    "Description": "In een dystopische toekomst ontdekt computerhacker Neo (Keanu Reeves) dat de werkelijkheid zoals hij die kent een illusie is, gecreëerd door sentient machines om de mensheid te controleren. Wanneer hij wordt gerekruteerd door een groep rebellen geleid door Morpheus (Laurence Fishburne), komt Neo erachter dat hij de sleutel is tot het bevrijden van de mensheid. Terwijl hij de waarheid achter de Matrix onthult, leert hij om zijn krachten te omarmen en zich te verzetten tegen de agents, waaronder de meedogenloze Agent Smith (Hugo Weaving). In deze spannende strijd tussen vrijheid en controle moet Neo zijn lot aanvaarden en de ware betekenis van zijn rol in de oorlog tussen mens en machine ontdekken.",
+    "Video": "https://www.youtube.com/embed/vKQi3bBA1y8",
+    "videoPlaceholderImage": "https://cdn.europosters.eu/image/hp/69061.jpg",
+    "Cast": [ "Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss" ],
+    "Cinemas": [
+      {
+        "Name": "Mechelen",
+        "Showtimes": [
+          "2024-10-28T11:00:00",
+          "2024-10-28T14:30:00",
+          "2024-10-28T18:00:00"
+        ]
+      }
+    ]
+  },
+  {
+    "Id": 5,
+    "Name": "Parasite",
+    "Cover": "https://m.media-amazon.com/images/M/MV5BYjk1Y2U4MjQtY2ZiNS00OWQyLWI3MmYtZWUwNmRjYWRiNWNhXkEyXkFqcGc@._V1_.jpg",
+    "Genre": "Thriller",
+    "Duration": "132 minuten",
+    "Director": "Bong Joon-ho",
+    "Description": "In deze scherpe sociale satire volgt de arme familie Kim die hun leven verandert wanneer ze infiltreren in het rijke huishouden van de Park-familie. Door hun vaardigheden en slinkse manieren weten ze zich als werknemers voor te stellen en zo de armoede te ontvluchten. Maar wanneer geheimen onthuld worden en de twee families op een onvoorspelbare manier met elkaar verweven raken, ontstaan er onvoorziene gevolgen. De film behandelt thema's als sociale ongelijkheid, klasse en de dynamiek van de menselijke relaties.",
+    "Video": "https://www.youtube.com/embed/5xY8y5V6F0o",
+    "videoPlaceholderImage": "https://caitbuxbaum.com/wp-content/uploads/2024/04/parasite-banner.png?w=800&h=312&crop=1",
+    "Cast": [ "Kang-ho Song", "Sun-kyun Lee", "Yeo-jeong Jo" ],
+    "Cinemas": [
+      {
+        "Name": "Brugge",
+        "Showtimes": [
+          "2024-10-28T16:15:00",
+          "2024-10-28T19:45:00"
+        ]
+      },
+      {
+        "Name": "Antwerpen",
+        "Showtimes": [
+          "2024-10-28T15:30:00",
+          "2024-10-28T20:00:00"
+        ]
+      }
+    ]
+  }
+]

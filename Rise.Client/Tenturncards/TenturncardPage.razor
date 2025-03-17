@@ -1,0 +1,63 @@
+﻿@page "/account/tenturncard"
+@attribute [Authorize]
+@using Rise.Client.Tenturncards.Components
+@using Rise.Shared.Tenturncards
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+<div class="flex h-screen mt-0 relative min-h-screen">
+    <Sidebar />
+
+    <div class="flex-1 p-6 overflow-y-auto overflow-x-auto">
+        <div class="flex justify-between items-center space-x-4 mt-4">
+            <!-- Green Button with Icon and Text -->
+            <button class="flex items-center px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 shadow-md transition-all" @onclick="NavigateToActivatePage">
+                <i class="fas fa-plus-circle text-lg mr-2"></i> <!-- Icon -->
+                <span class="hidden sm:inline">Voeg een nieuwe Tienbeurtenkaart toe</span> <!-- Text hidden on small screens -->
+            </button>
+
+            <!-- Blue Button with Icon and Text -->
+            <button class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 shadow-md transition-all ml-auto" @onclick="ShowModal">
+                <i class="fas fa-info-circle text-lg mr-2"></i> <!-- Icon -->
+                <span class="hidden sm:inline">Meer info over Tienrittenkaart</span> <!-- Text hidden on small screens -->
+            </button>
+        </div>
+
+
+        <div class="mt-16">
+            <TenTurnCardList RittenKaarten="RittenKaarten" />
+        </div>
+    </div>
+
+    @if (isModalOpen)
+    {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div class="bg-white rounded-lg w-full max-w-3xl p-8">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                    Tienrittenkaart
+                </h3>
+                <div class="mt-2">
+                    <p class="text-sm leading-5 text-gray-500 mb-4">
+                        Voor maar 85 euro kan je aan de kassa of online een tienrittenkaart kopen. Deze kaart geeft je 10 toegangtickets voor films naar keuze. Enkel geldig op filmvertoningen met een standaard ticketprijs.
+                    </p>
+                    <p class="text-sm leading-5 text-gray-500 mb-4">
+                        De tienrittenkaart is 6 maanden geldig in alle Lumière-bioscopen (Brugge, Mechelen, Antwerpen, Cinema Cartoon’s en de pop-upcinema Lumière aan zee in Knokke-Heist).
+                    </p>
+                </div>
+
+                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                    <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                        <button type="button" @onclick="Accept" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            Terug
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@code {
+    private void NavigateToActivatePage()
+    {
+        Navigation.NavigateTo("/account/tenturncard/activateCard");
+    }
+}

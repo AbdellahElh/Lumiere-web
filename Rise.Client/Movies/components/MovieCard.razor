@@ -1,0 +1,63 @@
+﻿@namespace Rise.Client.Movies.components
+@using Rise.Shared.Movies
+@inject NavigationManager Navigation
+
+<div class="flex max-md:flex-col sm:flex-row xl:flex-row items-start border border-gray-300 rounded-lg p-4 mb-4 bg-white relative hover:shadow-lg min-h-60">
+    <img src="@MovieData.CoverImageUrl" alt="@MovieData.Title" class="w-32 h-auto mb-4 sm:mb-0 sm:mr-4 cursor-pointer" @onclick="NavigateToMovie" />
+    <div class="flex-1">
+        <h5 class="underline text-xl cursor-pointer pb-2" @onclick="NavigateToMovie">
+            @MovieData.Title
+        </h5>
+        <MovieCinemas Movie="@MovieData" />
+    </div>
+    @if (IsAuthenticated)
+    {
+        <div class="absolute top-4 right-4 cursor-pointer" @onclick="HandleIconClickAsync">
+            @if (IsInWatchlistPage)
+            {
+                <i data-test-id="removeIcon" class="fa-solid fa-times text-red-400 text-2xl"></i>
+            }
+            else
+            {
+                @if (IsStarred)
+                {
+                    <i data-test-id="solidStar" class="fa-solid fa-star text-orange-400 text-2xl"></i>
+                }
+                else
+                {
+                    <i data-test-id="regularStar" class="fa-regular fa-star text-orange-400 text-2xl"></i>
+                }
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required MovieDto MovieData { get; set; }
+
+    [Parameter]
+    public bool IsStarred { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnStarStatusChanged { get; set; }
+
+    [Parameter]
+    public bool IsInWatchlistPage { get; set; } = false;
+
+    [Parameter]
+    public bool IsAuthenticated { get; set; }
+
+    private void NavigateToMovie()
+    {
+        Navigation.NavigateTo($"/Movie/{MovieData.Id}");
+    }
+
+    private async Task HandleIconClickAsync()
+    {
+        if (OnStarStatusChanged.HasDelegate)
+        {
+            await OnStarStatusChanged.InvokeAsync(!IsStarred);
+        }
+    }
+}

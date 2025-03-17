@@ -1,0 +1,72 @@
+@page "/watchlist"
+@attribute [Authorize]
+@using Rise.Shared.Movies
+@using Rise.Client.Movies.components
+@inject IWatchlistService WatchlistService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="flex mt-0 relative min-h-screen">
+    <Sidebar />
+        <div class="mx-16 my-4">
+            <h2 class="text-3xl mb-6">Je Watchlist</h2>
+            @if (Movies == null || !Movies.Any())
+            {
+                <p>Je hebt geen films in je watchlist.</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var movie in Movies)
+                    {
+                        <li>
+                            <MovieCard
+                                MovieData="@movie"
+                                IsStarred="true"
+                                OnStarStatusChanged="(isStarred) => RemoveFromWatchlistAsync(movie)"
+                                IsInWatchlistPage="true"
+                                IsAuthenticated="IsAuthenticated" />
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+</div>
+
+@code {
+    private List<MovieDto> Movies { get; set; } = new();
+    private bool IsAuthenticated { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+        await LoadWatchlistAsync();
+    }
+
+    private async Task LoadWatchlistAsync()
+    {
+        Movies = await WatchlistService.LoadWatchlistAsync();
+    }
+
+    private async Task RemoveFromWatchlistAsync(MovieDto movie)
+{
+    Movies.Remove(movie);
+
+    try
+    {
+        await WatchlistService.RemoveFromWatchlistAsync(movie.Id);
+    }
+    catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+    {
+        Console.WriteLine($"Movie with ID {movie.Id} not found on server. It was likely already removed.");
+        // Eventueel een fout tonen aan de gebruiker, maar dit hoeft niet in principe. De gebruiker heeft hier niks aan.
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Unexpected error while removing movie {movie.Id}: {ex.Message}");
+    }
+}
+
+}
+

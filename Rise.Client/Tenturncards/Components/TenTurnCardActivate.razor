@@ -1,0 +1,55 @@
+﻿@using Rise.Shared.Tenturncards
+@inject ITenturncardService TenturncardService
+
+<EditForm Model="@tenturncardCodeModel" OnValidSubmit="@ActivateTenturncardAsync">
+    <div class="flex flex-col space-y-4">
+        <label for="tenturncardCode" class="text-lg font-bold">Tienbeurtenkaart toevoegen</label>
+        <InputText id="tenturncardCode" class="p-2 border border-gray-300 rounded-md" placeholder="Tienbeurtenkaart code" @bind-Value="tenturncardCodeModel.TenturncardCode" />
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Toevoegen</button>
+    </div>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(SuccessMessage))
+{
+    <div id="succesmessage" class="text-green-500 mt-4">@SuccessMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div id="errormessage" class="text-red-500 mt-4">@ErrorMessage</div>
+}
+
+@code {
+    private TenturncardCodeModel tenturncardCodeModel = new();
+
+    [Parameter] public EventCallback OnActivationSuccess { get; set; }
+    [Parameter] public string? SuccessMessage { get; set; }
+    [Parameter] public string? ErrorMessage { get; set; }
+
+    private async Task ActivateTenturncardAsync()
+    {
+        ErrorMessage = string.Empty;
+        SuccessMessage = string.Empty;
+
+        try
+        {
+            await TenturncardService.AddTenturncard(tenturncardCodeModel.TenturncardCode!);
+            SuccessMessage = $"De tienbeurtenkaart met de code {tenturncardCodeModel.TenturncardCode} is toegevoegd";
+
+            // Trigger the success callback
+            if (OnActivationSuccess.HasDelegate)
+            {
+                await OnActivationSuccess.InvokeAsync();
+            }
+        }
+        catch (Exception)
+        {
+            ErrorMessage = $"Er was geen tienbeurtenkaart met de code {tenturncardCodeModel.TenturncardCode} gevonden";
+        }
+    }
+
+    private class TenturncardCodeModel
+    {
+        public string? TenturncardCode { get; set; }
+    }
+}

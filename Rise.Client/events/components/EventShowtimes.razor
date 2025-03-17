@@ -1,0 +1,115 @@
+﻿@using Rise.Shared.Events
+@using Rise.Shared.Movies
+@using Rise.Client.Util
+@using Rise.Shared.Tickets
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<span class="showtime-buttons">
+     @if (ShowLoginPopup)
+    {
+        <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" @onclick="ClosePopup">
+            <div class="bg-white p-6 rounded shadow-lg text-center relative" @onclick:stopPropagation="true">
+                <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700" @onclick="ClosePopup">
+                    &times;
+                </button>
+                <h2 class="text-xl font-bold mb-4">Login Nodig</h2>
+                <p class="mb-4">Je moet inloggen om een ticket te kunnen kopen.</p>
+                <button class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out" @onclick="NavigateToLogin">
+                    Login
+                </button>
+            </div>
+        </div>
+    }
+    @if (CinemaData.Showtimes != null && CinemaData.Showtimes.Any())
+    {
+        @foreach (var showtime in CinemaData.Showtimes)
+        {
+             <button class="showtime-button shadow-md rounded-md px-2 py-1 m-1 text-sm cursor-pointer transition duration-300 ease-in-out @GetButtonColorClass(CinemaData.Name)"
+                    @onclick="() => NavigateToTickets(CinemaData.Name, showtime)">
+               
+             <FormattedShowtime Showtime="@showtime" />
+
+            </button>
+        }
+    }
+</span>
+
+@code {
+  
+    private string _selectedDate = "2024-11-01";
+    [Inject] private ITicketService TicketService { get; set; } = null!;
+
+    [Parameter, EditorRequired] public required Rise.Shared.Movies.CinemaDto CinemaData { get; set; }
+    [Parameter, EditorRequired] public required int EventId { get; set; }
+
+    [Parameter]
+    public string SelectedDate { get; set; } = "2024-11-01";
+
+    private bool IsAuthenticated { get; set; }
+    private bool ShowLoginPopup { get; set; }
+
+    private IEnumerable<DateTime> FilteredShowtimes => CinemaData.Showtimes
+         .Where(st => st.Date.ToString("yyyy-MM-dd") == SelectedDate)
+         .Select(st => st.Date);
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+        ShowLoginPopup = false;
+    }
+
+    private string GetButtonColorClass(string cinemaName)
+    {
+        return cinemaName switch
+        {
+            "Brugge" => "bg-red-800 text-white hover:opacity-80",
+            "Mechelen" => "bg-yellow-400 text-black hover:opacity-80",
+            "Antwerpen" => "bg-black text-white hover:opacity-80",
+            "Cinema Cartoons" => "bg-green-400 text-black hover:opacity-80",
+            _ => ""
+        };
+    }
+ private async  Task NavigateToTickets(string cinemaName, DateTime showtime)
+    {
+        if (!IsAuthenticated)
+        {
+            ShowLoginPopup = true;
+            return;
+        }
+         AddTicketDto ticketDto = new AddTicketDto
+        {
+            MovieId = 0,
+            EventId = EventId,
+            CinemaName = cinemaName,
+            ShowTime = showtime
+        };
+        await TicketService.AddTicket(ticketDto);  
+
+        var url = cinemaName switch
+        {
+            "Brugge" => $"https://tickets.lumierecinema.be/lumiere/nl/flow_configs/webshop",
+            "Antwerpen" => $"https://tickets.lumiere-antwerpen.be/lumiereantwerpen/nl/flow_configs/webshop",
+            "Mechelen" => $"https://tickets.lumieremechelen.be/lumieremechelen/nl/flow_configs/webshop",
+            "Cinema Cartoons" => $"https://tickets.cinemacartoons.be/cartoons/nl/flow_configs/webshop",
+            _ => ""
+        };
+
+        if (!string.IsNullOrEmpty(url))
+        {
+            Navigation.NavigateTo(url);
+        }
+    }
+  
+   
+
+    private void NavigateToLogin()
+    {
+        Navigation.NavigateTo("/authentication/login");
+    }
+     private void ClosePopup()
+    {
+        ShowLoginPopup = false;
+    }
+}

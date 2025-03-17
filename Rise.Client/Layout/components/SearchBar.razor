@@ -1,0 +1,39 @@
+﻿<div class="flex items-center space-x-2 relative">
+    @if (isSearchVisible)
+    {
+        <div class="relative">
+
+            <EditForm Model="filters" OnValidSubmit="ValidateInput">
+                <div class="flex items-center">
+                    <input type="text"
+                           placeholder="@GetPlaceholder()"
+                           @bind="filters.Title"
+                           class="w-72 px-2 py-0.5 h-8 border rounded-l-md focus:outline-none focus:ring focus:ring-blue-300 text-black @GetInputClass()" />
+
+                    <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white rounded-md w-6 h-6 flex items-center justify-center cursor-pointer">
+                        <i class="fas fa-search" data-testid="search-movie-button"></i>
+                    </button>
+                </div>
+            </EditForm>
+
+
+            @if (moviesFound != null)
+            {
+                <MovieListSearch MoviesFound="moviesFound" OnMovieSelected="HandleMovieSelected" />
+            }
+
+        </div>
+        <i class="fas fa-times text-2xl hover:text-yellow-500 transform transition duration-300"
+           @onclick="ToggleSearchBar"
+           data-testid='close-toggle-button'></i>
+
+       
+    }
+    else
+    {
+        <i class="fas fa-search text-2xl hover:text-yellow-500 transform transition duration-300"
+           @onclick="ToggleSearchBar"
+           data-testid="search-toggle-button"></i>
+    }
+
+</div>

@@ -1,0 +1,89 @@
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Rise.Client.Auth
+@using Rise.Client.Layout.components
+@using Rise.Shared.Movies
+@inherits LayoutComponentBase
+
+<div class="navbar flex justify-between items-center bg-[black] text-[white] sticky z-[999000] m-0 px-4 py-2 left-0 top-0 w-full">
+
+    <div class="logo hidden lg:block">
+        <a href="/">
+            <img src="images/lumiereLogo.png" alt="lumière logo" class="w-24 h-auto" />
+        </a>
+    </div>
+
+    <div class="flex lg:hidden items-center w-full">
+        <div class="ml-auto flex items-center space-x-2">
+            <SearchBar />
+        </div>
+
+        <button @onclick="ToggleMobileMenu" class="text-2xl pl-8 pr-4 space-x-0">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="hidden lg:flex nav-right items-center gap-8">
+        <div class="nav-links flex gap-5">
+            <SearchBar />
+            <a href="/" class="text-white text-lg font-medium hover:opacity-70">HOME</a>
+            <a href="/Programma" class="text-white text-lg font-medium hover:opacity-70">PROGRAMMA</a>
+            <a href="/events" class="text-white text-lg font-medium hover:opacity-70">EVENTS</a>
+        </div>
+
+        <div class="nav-icons flex gap-8">
+            <div class="relative">
+                <div class="profile-icon cursor-pointer" @onclick="ToggleProfileDropdown">
+                    <i class="fas fa-user text-2xl text-white hover:opacity-70"></i>
+                </div>
+                @if (isProfileDropdownVisible)
+                {
+                    <div class="dropdown-menu absolute top-full right-0 bg-white shadow-md py-2 z-10">
+                        <LoginDisplay OnItemClick="HideMobileMenu" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (isMobileMenuVisible)
+    {
+        <div class="absolute top-full left-0 w-full bg-black flex flex-col items-start p-4 space-y-4 lg:hidden">
+            <a href="/" class="text-white text-lg font-medium hover:opacity-70" @onclick="HideMobileMenu">HOME</a>
+            <a href="/Programma" class="text-white text-lg font-medium hover:opacity-70" @onclick="HideMobileMenu">PROGRAMMA</a>
+            <a href="/events" class="text-white text-lg font-medium hover:opacity-70" @onclick="HideMobileMenu">EVENTS</a>
+
+            <div class="text-white text-lg font-medium hover:opacity-70 cursor-pointer" @onclick="ToggleProfileDropdown">
+                <i class="fas fa-user mr-2"></i> Account
+            </div>
+            @if (isProfileDropdownVisible)
+            {
+                <div class="bg-white shadow-md p-4 rounded w-full">
+                    <LoginDisplay OnItemClick="HideMobileMenu" />
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool isProfileDropdownVisible = false;
+    private bool isMobileMenuVisible = false;
+
+    private void ToggleProfileDropdown()
+    {
+        isProfileDropdownVisible = !isProfileDropdownVisible;
+    }
+
+    private void ToggleMobileMenu()
+    {
+        isMobileMenuVisible = !isMobileMenuVisible;
+    }
+
+    private void HideMobileMenu()
+    {
+        isMobileMenuVisible = false;
+        isProfileDropdownVisible = false;
+    }
+}

@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager Navigation
+
+<AuthorizeView>
+    <NotAuthorized>
+        <a href="/register" class="block px-4 py-2 text-black hover:bg-gray-200" @onclick="InvokeItemClick">
+            Register
+        </a>
+        <a href="authentication/login" class="block px-4 py-2 text-black hover:bg-gray-200" @onclick="InvokeItemClick">
+            Login
+        </a>
+    </NotAuthorized>
+    <Authorized>
+        <a href="/account" class="block px-4 py-2 text-black hover:bg-gray-200" @onclick="InvokeItemClick">
+            Account
+        </a>
+
+        <a href="#" class="block px-4 py-2 text-black hover:bg-gray-200" @onclick="LogoutAndInvokeItemClick">
+            Logout
+        </a>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public EventCallback OnItemClick { get; set; }
+
+    private async Task InvokeItemClick()
+    {
+        await OnItemClick.InvokeAsync();
+    }
+
+    private async Task LogoutAndInvokeItemClick()
+    {
+        BeginLogOut();
+        await InvokeItemClick();
+    }
+
+    public void BeginLogOut()
+    {
+        Navigation.NavigateToLogout("authentication/logout");
+    }
+}

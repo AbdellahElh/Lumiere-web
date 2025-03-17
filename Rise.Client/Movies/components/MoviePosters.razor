@@ -1,0 +1,59 @@
+@using Rise.Shared.Movies
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<div class="relative w-full mx-auto mt-6 overflow-hidden">
+    <h2 class="text-2xl ml-9">Recente films</h2>
+    <!-- Left Arrow -->
+    <button @onclick="ScrollLeft" class="absolute top-1/2 transform -translate-y-1/2 bg-black/50 text-white border-none p-2 cursor-pointer text-2xl z-50 left-0 hover:bg-black/80">
+        &#10094;
+    </button>
+
+    <!-- Movie Posters Container -->
+    <div class="flex gap-5 px-10 py-5 overflow-x-auto scroll-smooth scrollbar-hide flex-nowrap" @ref="movieCarouselRef" style="scrollbar-width: none; -ms-overflow-style: none;">
+        @if (MoviePosterDtos != null && MoviePosterDtos.Count > 0)
+        {
+            @foreach (var moviePosterDto in MoviePosterDtos)
+            {
+                <form action="/Movie/@moviePosterDto.Id" method="get" class="shrink-0">
+                    <button type="submit" class="bg-none border-none p-0">
+                        <img src="@moviePosterDto.Cover" alt="Movie Poster" class="shrink-0 w-[150px] h-[225px] object-cover" />
+                    </button>
+                </form>
+            }
+        }
+        else
+        {
+            <p>No movies available to display.</p>
+        }
+    </div>
+
+    <!-- Right Arrow -->
+    <button @onclick="ScrollRight" class="absolute top-1/2 transform -translate-y-1/2 bg-black/50 text-white border-none p-2 cursor-pointer text-2xl z-50 right-0 hover:bg-black/80">
+        &#10095;
+    </button>
+</div>
+
+@code {
+    private ElementReference movieCarouselRef;
+
+    [Parameter]
+    public List<MoviePosterDto> MoviePosterDtos { get; set; } = new List<MoviePosterDto>();
+
+    private async Task ScrollLeft()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollElement", movieCarouselRef, -300);
+    }
+
+    private async Task ScrollRight()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollElement", movieCarouselRef, 300);
+    }
+}
+
+
+<script>
+    function scrollElement(element, scrollAmount) {
+        element.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+</script>

@@ -1,0 +1,42 @@
+﻿@using Rise.Client.events
+@using Rise.Shared.Events
+@using Rise.Client.Util
+@inject NavigationManager Navigation
+
+<div class="pl-4 pr-4 grid grid-cols-1 md:grid-cols-[1fr_500px] gap-4">
+    <!-- Title Block -->
+    <div class="col-span-1 md:col-span-2 bg-white border border-black shadow-lg rounded-md p-4 mb-4">
+        <h2 class="text-2xl pl-4 font-bold">@Event.Title</h2>
+    </div>
+
+    <!-- Left side: Movie covers -->
+
+    <div class="flex flex-wrap gap-4 justify-start">
+        @foreach (var movie in Event.Movies)
+        {
+            <div class="flex p-2 bg-gray-100 border border-gray-300 rounded-md shadow-md w-[170px]">
+                <img src="@movie.Cover" class="w-[150px] h-[200px] rounded-md mb-2" />
+            </div>
+        }
+    </div>
+
+    <!-- Right side: Event title and details -->
+    <div class="bg-white border border-black shadow-lg rounded-md p-4 max-h-[500px] overflow-y-auto">
+        <!-- Details -->
+        <div>
+            <p><strong>🎭 Genre:</strong> @Event.Genre</p>
+            <p><strong>📜 Type:</strong> @(Event.Type ?? "Niet beschikbaar")</p>
+            <p class="text-gray-600 mt-4 leading-6">@Event.Description</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required EventDto Event { get; set; }
+
+    private void NavigateToTickets()
+    {
+        Navigation.NavigateTo($"{Navigation.Uri}#showtimes-section");
+    }
+}

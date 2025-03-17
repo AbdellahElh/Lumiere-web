@@ -1,0 +1,25 @@
+﻿@page "/Movie/{IdMovie:int}"
+@using Rise.Client.Movies
+@using Rise.Shared.Movies
+@using System.Linq;
+
+@if (foundItem != null)
+{
+    <div>
+        <MovieVideo Movie="foundItem.Movie"  />
+    </div>
+    <div>
+        <MovieInfoBanner Movie="foundItem.Movie"/>
+    </div>
+    <div>
+        <MovieInfoBody Movie="foundItem.Movie" Event="foundItem.Event" />
+    </div>
+}
+else if (isLoading)
+{
+    <p>Loading movie...</p>
+}
+else
+{
+    <p>Movie not found</p>
+}

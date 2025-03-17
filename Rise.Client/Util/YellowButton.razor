@@ -1,0 +1,13 @@
+﻿<button class="showtime-button shadow-md rounded-md px-3 py-2 m-1 text-base cursor-pointer transition duration-300 ease-in-out"
+        style="background-color: yellow; color: black;"
+        @onclick="OnClick">
+    @ButtonText
+</button>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; } = "Click Me";
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+}

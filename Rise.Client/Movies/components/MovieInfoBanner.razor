@@ -1,0 +1,41 @@
+﻿@using Rise.Client.Movies
+@using Rise.Shared.Movies
+@using Rise.Client.Util
+@inject NavigationManager Navigation
+
+<div class="pl-4 pr-4">
+    <div class="flex flex-col sm:flex-row items-start pl-4 pr-4 p-4 mb-4 bg-white border border-black shadow-lg rounded-md relative">
+        <img src="@Movie.CoverImageUrl" alt="@Movie.Title" class="max-w-[180px] h-auto mb-4 sm:mb-0 sm:mr-4 mx-auto sm:mx-0 shadow-md" />
+
+        <div class="flex-1 relative">
+        <h5 class="text-lg font-bold underline mb-2">@Movie.Title</h5>
+            <p class="text-sm leading-6">@Movie.Description</p>
+
+        
+
+            <div class="hidden sm:block border-r border-black h-full absolute right-0 top-0"></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-column items-start pl-4 pt-4">
+            <div class="flex-1 text-sm max-w-lg mb-2">
+                <MovieCredits Movie="@Movie" />
+            </div>
+
+            <div class="flex justify-center w-full mt-2 pr-1 pt-4">
+                <YellowButton ButtonText="Buy Tickets" OnClick="NavigateToTickets" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required MovieDto Movie { get; set; }
+     
+    private void NavigateToTickets()
+    {
+    Navigation.NavigateTo($"{Navigation.Uri}#showtimes-section");
+    }
+
+  
+}

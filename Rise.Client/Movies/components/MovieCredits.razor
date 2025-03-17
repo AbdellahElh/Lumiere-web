@@ -1,0 +1,15 @@
+﻿@using Rise.Shared.Movies
+
+<div class="space-y-2">
+    <p><strong>Genre:</strong> @Movie.Genre</p>
+    <p><strong>Speeltijd:</strong> @Movie.Duration</p>
+    <p><strong>Regie:</strong> @Movie.Director</p>
+    <p><strong>Cast:</strong> @string.Join(", ", Movie.Cast)</p>
+    <p><strong>Ondertiteling:</strong> NL/FR </p>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required MovieDto Movie { get; set; }
+
+}

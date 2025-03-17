@@ -1,0 +1,14 @@
+@page "/account"
+@attribute [Authorize]
+
+
+<div class="flex h-screen mt-0">
+    <Sidebar/>
+
+    <div class="flex-grow p-10 bg-gray-100 overflow-y-auto overflow-x-hidden">
+        <h1 class="text-3xl font-bold mb-6  pl-6">Account Overzicht</h1>
+        <div class="space-y-10">
+            <Welkom/>
+        </div>
+    </div>
+</div>

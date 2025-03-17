@@ -1,0 +1,55 @@
+@page "/register"
+@using Rise.Shared.Accounts
+@inject NavigationManager navigation
+
+
+<PageTitle>Sign up</PageTitle>
+
+<div class="bg-[#ffffff] font-ubuntu">
+    <div
+        class="bg-white w-[400px] h-[400px] mx-auto my-[7em] rounded-[1.5em] shadow-[0_11px_35px_2px_rgba(0,0,0,0.14)]">
+        <p class="pt-8 mb-8 text-center text-black font-bold text-[23px]">Sign up</p>
+
+        <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
+            <div class="mt-[-10px]">
+                <div class="text-center">
+                    <InputText type="text"
+                        id="email"
+                        class="w-[76%] py-[10px] px-[20px] rounded-[20px] mb-[27px] border-[2px] border-[#0000001a]"
+                        placeholder="Email" @bind-Value="registerModel.Email" />
+                </div>
+                <div class="text-center">
+                    <InputText type="password"
+                               id="password"
+                        class="w-[76%] py-[10px] px-[20px] rounded-[20px] mb-[27px] border-[2px] border-[#0000001a]"
+                        placeholder="Password" @bind-Value="registerModel.Password" />
+                </div>
+                <div class="text-center">
+                    <InputText type="password"
+                               id="passwordRepeat"
+                        class="w-[76%] py-[10px] px-[20px] rounded-[20px] mb-[27px] border-[2px] border-[#0000001a]"
+                        placeholder="Repeat Password" @bind-Value="registerModel.RepeatPassword" />
+                </div>
+                <div class="text-center text-red-500">
+                    @if (!string.IsNullOrEmpty(ErrorMessage))
+                    {
+                        <p>@ErrorMessage</p>
+                    }
+                </div>
+                <div class="mt-[-5px] mb-[15px] flex justify-center">
+                    <button type="submit"
+                        class="cursor-pointer rounded-full text-white bg-gradient-to-r from-black to-[#797979] border-0 px-[40px] py-[10px] text-[13px] shadow-[0_0_20px_1px_rgba(0,0,0,0.04)] min-w-[100px]">
+                        Sign up
+                    </button>
+                </div>
+
+            </div>
+        </EditForm>
+
+        <p class="text-center">
+            <a href="/login" class="text-black no-underline text-[rgba(117,117,117,0.12)]">Already have an account? Sign
+                in</a>
+        </p>
+    </div>
+</div>
+

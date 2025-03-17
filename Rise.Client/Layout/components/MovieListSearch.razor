@@ -1,0 +1,26 @@
+﻿ <div class="absolute left-0 top-full bg-white shadow-md rounded-md w-full mt-2 z-10 max-h-60 overflow-y-auto border border-gray-300">
+    @if(MoviesFound.Any())
+    {
+        <ul>
+            @foreach (var movie in MoviesFound)
+            {
+                <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center" @onclick="() => HandleMovieSelected(movie)">
+                    <img src="@movie.CoverImageUrl" alt="@movie.Title" class="w-16 h-auto mr-4 cursor-pointer" />
+                    <div>
+                        <strong class="block text-black">@movie.Title</strong>
+                        <p class="text-sm text-gray-600">@movie.Genre</p>
+                    </div>
+                </li>
+              
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+
+            <p class="text-sm text-gray-600" data-testid="noMovies_message">Geen films gevonden</p>
+        </div>
+    }
+</div>
+

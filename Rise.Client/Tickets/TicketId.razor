@@ -1,0 +1,53 @@
+@page "/tickets/{IdTicket:int}"
+@using Rise.Shared.Tickets
+@inject ITicketService TicketService
+@using QRCoder
+
+    <div class=" mx-auto p-4" style="max-width: 700px;">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-2xl font-bold mb-4">Ticket Nr: @Ticket?.Id</h3>
+            @if (Ticket == null)
+            {
+                <p class="text-gray-500"><em>Loading...</em></p>
+            }
+            else
+            {
+                <h4 class="text-xl font-semibold mb-2">
+                    @{
+                        var title = Ticket.Movie != null ? Ticket.Movie.Title : Ticket.Event.Title;
+                    }
+                    @title
+                </h4>
+                <p class="text-gray-600">@Ticket.DateTime.ToString("f")</p>
+                <img class="mx-auto " src="@qrCodeImageUrl" alt="QR Code" style="width: 50%;"/>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int IdTicket { get; set; }
+
+    private TicketDto Ticket { get; set; }
+    private string qrCodeImageUrl;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Ticket = await TicketService.GetTicketByIdAsync(IdTicket);
+        if (Ticket != null)
+        {
+             await GenerateQrCodeAsync($"{Ticket.Id}");
+        }
+    }
+
+    private async Task GenerateQrCodeAsync(string text)
+    {
+          using var qrGenerator = new QRCodeGenerator();
+        using var qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+        using var qrCode = new PngByteQRCode(qrCodeData);
+        var qrCodeBytes = qrCode.GetGraphic(20);
+        qrCodeImageUrl = $"data:image/png;base64,{Convert.ToBase64String(qrCodeBytes)}";
+    }
+}

@@ -1,0 +1,37 @@
+@code {
+    [Inject] private NavigationManager Navigation { get; set; } = null!;
+    [Parameter] public string ImageUrl { get; set; } = string.Empty;
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string Date { get; set; } = string.Empty;
+    [Parameter] public string Location { get; set; } = string.Empty;
+    [Parameter] public string Type { get; set; } = string.Empty;
+    [Parameter] public int Id { get; set; }
+
+    private void NavigateToEvent()
+    {
+        Navigation.NavigateTo($"/events/{Id}");
+    }
+}
+
+<div class="event-item bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 w-[100%] h-fit"  >
+    <div class="relative" style="cursor: pointer" @onclick="NavigateToEvent">
+        <img src="@ImageUrl" alt="@Title" class="w-full object-cover" style="aspect-ratio: 6/4;">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <span class="text-white text-lg font-semibold">
+                Ontdek meer
+                <svg class="w-5 h-5 inline-block ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0L17 8.586a1 1 0 010 1.414l-3.293 3.293a1 1 0 01-1.414-1.414L14.586 10H6a1 1 0 110-2h8.586l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </span>
+        </div>
+    </div>
+    <div class="p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-2">@Title</h2>
+        <p class="text-gray-600 mb-1"><strong>📅 Datum:</strong> @Date</p>
+        <p class="text-gray-600 mb-1"><strong>🎞️ Type:</strong> @Type</p>
+        <p class="text-gray-600 mb-4">
+            <strong>📍 @(Location.Contains(",") ? "Locaties" : "Locatie"):</strong> @Location
+        </p>        
+       
+    </div>
+</div>

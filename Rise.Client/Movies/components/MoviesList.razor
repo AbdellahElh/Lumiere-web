@@ -1,0 +1,82 @@
+﻿@using Rise.Shared.Movies
+@using Rise.Client.Movies.components
+@inject IWatchlistService WatchlistService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div>
+    @if (Movies == null || !Movies.Any())
+    {
+        <p>Er zijn geen films om weer te geven.</p>
+    }
+    else
+    {
+        <ul class="grid grid-cols-1 gap-4 lg:grid-cols-2 px-4">
+            @foreach (var movie in Movies)
+            {
+                <li>
+                    <MovieCard MovieData="@movie" IsStarred="IsMovieStarred(movie.Id)"
+                        OnStarStatusChanged="(isStarred) => OnStarStatusChanged(movie, isStarred)" IsInWatchlistPage="false"
+                        IsAuthenticated="IsAuthenticated" />
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<MovieDto> Movies { get; set; } = new();
+    private HashSet<int> WatchlistMovieIds { get; set; } = new();
+    private bool IsAuthenticated { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+        if (IsAuthenticated)
+        {
+            await LoadWatchlistAsync();
+        }
+    }
+
+    private async Task LoadWatchlistAsync()
+    {
+        var watchlist = await WatchlistService.LoadWatchlistAsync();
+        WatchlistMovieIds = watchlist.Select(m => m.Id).ToHashSet();
+    }
+
+    private bool IsMovieStarred(int movieId)
+    {
+        return WatchlistMovieIds.Contains(movieId);
+    }
+
+    private async Task OnStarStatusChanged(MovieDto movie, bool isStarred)
+    {
+        try
+        {
+            if (isStarred)
+            {
+                await WatchlistService.AddToWatchlistAsync(movie);
+                WatchlistMovieIds.Add(movie.Id);
+            }
+            else
+            {
+                await WatchlistService.RemoveFromWatchlistAsync(movie.Id);
+                WatchlistMovieIds.Remove(movie.Id);
+            }
+        }
+        catch (Exception)
+        {
+            // Fouten opvangen en de volledige lijst opnieuw inladen
+            await ReloadMovieListAsync();
+        }
+    }
+
+    private async Task ReloadMovieListAsync()
+    {
+        var watchlist = await WatchlistService.LoadWatchlistAsync();
+        WatchlistMovieIds = watchlist.Select(m => m.Id).ToHashSet();
+        StateHasChanged(); 
+    }
+}

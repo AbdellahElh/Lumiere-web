@@ -1,0 +1,26 @@
+@page "/events/{IdEvent:int}"
+@using Rise.Client.events
+@using Rise.Shared.Events
+@using System.Linq;
+@using Rise.Client.events.components
+
+@if (foundEvent != null)
+{
+    <div>
+        <EventVideo Event="foundEvent" />
+    </div>
+    <div>
+        <EventInfoBanner Event="foundEvent" />
+    </div>
+    <div>
+        <EventInfoBody Event="foundEvent" />
+    </div>
+}
+else if (isLoading)
+{
+    <p>Loading Event...</p>
+}
+else
+{
+    <p>Event not found</p>
+}

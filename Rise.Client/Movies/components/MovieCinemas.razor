@@ -1,0 +1,37 @@
+﻿@using Rise.Shared.Movies
+
+<table class="w-4/5 border-separate pl-8 max-w-sm">
+    <tbody>
+        @foreach (var cinema in CinemaNames)
+        {
+            var movieCinema = Movie.Cinemas.FirstOrDefault(c => c.Name.Equals(cinema, StringComparison.OrdinalIgnoreCase));
+
+            <tr class="cinema-item">
+                <td class="cinema-name font-bold">@cinema</td>
+                <td class="cinema-showtimes min-w-[200px]">
+                    @if (movieCinema != null && movieCinema.Showtimes.Any())
+                    {
+                        <MovieShowtimes CinemaData="@movieCinema" MovieId="@Movie.Id" />
+                    }
+                    else
+                    {
+                        <p class="no-showtimes text-gray-500 italic text-sm text-center">
+                            <span class="pr-6">-</span>
+                        </p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter, EditorRequired] public required MovieDto Movie { get; set; }
+    private List<string> CinemaNames = new List<string>
+    {
+        "Brugge",
+        "Mechelen",
+        "Antwerpen",
+        "Cinema Cartoons"
+    };
+}

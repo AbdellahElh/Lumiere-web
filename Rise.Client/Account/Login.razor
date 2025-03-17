@@ -1,0 +1,53 @@
+
+
+@page "/login"
+
+<PageTitle>Sign in</PageTitle>
+
+<div class="bg-[#ffffff] font-ubuntu">
+    <div class="bg-white w-[400px] h-[400px] mx-auto my-[7em] rounded-[1.5em] shadow-[0_11px_35px_2px_rgba(0,0,0,0.14)]">
+        <p class="pt-8 mb-8 text-center text-black font-bold text-[23px]">Sign in</p>
+
+        <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+            <div class="mt-[-10px]">
+                <div class="text-center">
+                    <InputText type="text" class="w-[76%] py-[10px] px-[20px] rounded-[20px] mb-[27px] border-[2px] border-[#0000001a]" 
+                               placeholder="Username" @bind-Value="loginModel.Username" />
+                </div>
+                <div class="text-center">
+                    <InputText type="password" class="w-[76%] py-[10px] px-[20px] rounded-[20px] mb-[27px] border-[2px] border-[#0000001a]" 
+                               placeholder="Password" @bind-Value="loginModel.Password" />
+                </div>
+                <div class="mt-[10px] pb-[10px]">
+                    <button type="submit" class="cursor-pointer rounded-full text-white bg-gradient-to-r from-black to-[#797979] border-0 px-[40px] py-[10px] text-[13px] shadow-[0_0_20px_1px_rgba(0,0,0,0.04)] mx-[35%]">
+                        Sign in
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+
+        <p class="text-center mt-[15px] mb-[20px]">
+            <a href="/" class="text-black no-underline text-[rgba(117,117,117,0.12)]">Forgot Password?</a>
+        </p>
+
+        <p class="text-center">
+            <a href='/register' class="text-black no-underline text-[rgba(117,117,117,0.12)]">Don't have an account yet? Sign up</a>
+        </p>
+    </div>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+
+    private void HandleLogin()
+    {
+        // Hier moet API-aanroep komen
+        Console.WriteLine($"Username: {loginModel.Username}, Password: {loginModel.Password}");
+    }
+
+    public class LoginModel
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

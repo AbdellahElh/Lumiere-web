@@ -1,0 +1,106 @@
+@using Rise.Shared.Movies
+@inject IMovieService MovieService
+@implements IDisposable
+
+<div class="w-full relative overflow-hidden">
+    @if (IsLoading)
+    {
+        <p>Banner is nog niet geladen</p>
+    }
+    else @if (MovieBannerDtos != null && MovieBannerDtos.Count > 0)
+    {
+        <div class="flex transition-transform duration-400" style="transform: translate3d(@(slideIndex * -100)%, 0, 0);">
+            @foreach (var movie in MovieBannerDtos)
+            {
+                <div class="relative min-w-full flex items-center justify-center pt-18">
+                    <img src="@movie.BannerImageUrl" alt="@movie.Title" class="w-full h-full object-banner" style="max-height: 500px;" />
+                    <div class="absolute bottom-2 left-12 bg-black bg-opacity-20 p-4 max-w-[55%] rounded">
+                        <h2 class="text-white text-2xl font-bold">@movie.Title</h2>
+                        <p class="text-white text-sm mt-2">@movie.Description</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="absolute top-1/2 left-0 transform -translate-y-1/2 px-4 py-2 text-white font-bold text-lg transition-colors hover:bg-black bg-opacity-50 z-10 cursor-pointer focus:outline-none"
+                @onclick="() => MoveSlides(-1)" data-cy="prev-slide">
+            &#10094;
+        </button>
+
+        <button class="absolute top-1/2 right-0 transform -translate-y-1/2 px-4 py-2 text-white font-bold text-lg transition-colors hover:bg-black bg-opacity-50 z-10 cursor-pointer focus:outline-none"
+                @onclick="() => MoveSlides(1)" data-cy="next-slide">
+            &#10095;
+        </button>
+    }
+    else
+    {
+        <p>Geen banners beschikbaar</p>
+    }
+</div>
+
+@code {
+    private bool IsLoading = true;
+
+    [Parameter]
+    public List<MovieBannerDto> MovieBannerDtos { get; set; }
+
+    public int slideIndex = 0;
+    private System.Threading.Timer? slideTimer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRecentMovies();
+        IsLoading = false;
+        StartSlideTimer();
+    }
+
+    private async Task LoadRecentMovies()
+    {
+        try
+        {
+            MovieBannerDtos = await MovieService.GetMovieBannersAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error loading recent movies: {ex.Message}");
+        }
+    }
+
+    private string GetInfoPageUrl(int movieId) => $"/Movie/{movieId}";
+
+    private void StartSlideTimer()
+    {
+        slideTimer = new System.Threading.Timer(_ =>
+        {
+            InvokeAsync(() => MoveSlides(1));
+        }, null, 10000, 10000);
+    }
+
+    private void ResetSlideTimer()
+    {
+        slideTimer?.Change(10000, 10000);
+    }
+
+    private void MoveSlides(int n)
+    {
+        if (MovieBannerDtos == null || MovieBannerDtos.Count == 0) return;
+
+        slideIndex += n;
+        if (slideIndex >= MovieBannerDtos.Count)
+        {
+            slideIndex = 0;
+        }
+        else if (slideIndex < 0)
+        {
+            slideIndex = MovieBannerDtos.Count - 1;
+        }
+
+        ResetSlideTimer();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        slideTimer?.Dispose();
+    }
+}

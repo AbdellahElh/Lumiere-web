@@ -1,0 +1,26 @@
+@inject NavigationManager Navigation
+
+<div class="bg-gray-800 text-gray-200 pt-10 h-auto transition-all duration-300 lg:w-1/5 w-16 flex flex-col">
+    <h2 class="text-xl font-bold text-center py-4 hidden lg:block">Account Menu</h2>
+    <ul class="space-y-4">
+        @foreach (var item in new[] {
+            ("/account", "Account", "fas fa-user"),
+            ("/watchlist", "Watchlist", "fas fa-list"),
+            ("/account/tickets", "Mijn Tickets", "fas fa-ticket-alt"),
+            ("/account/tenturncard", "Mijn Tienbeurtenkaarten", "fas fa-ticket-alt"),
+        })
+        {
+            <li class="py-2 px-6 hover:bg-gray-700 cursor-pointer flex items-center space-x-4" @onclick="() => NavigateTo(item.Item1)">
+                <i class="@item.Item3 text-xl"></i>
+                <span class="menu-text hidden lg:block">@item.Item2</span>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    private void NavigateTo(string url)
+    {
+        Navigation.NavigateTo(url);
+    }
+}

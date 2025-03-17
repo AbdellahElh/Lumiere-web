@@ -1,0 +1,12 @@
+﻿ @using System.Globalization
+
+<span>@FormattedShowtimeValue</span>
+
+@code {
+    [Parameter] public DateTime Showtime { get; set; }
+
+    private string FormattedShowtimeValue => Showtime.ToString("HH:mm", CultureInfo.InvariantCulture);
+}
+
+
+

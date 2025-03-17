@@ -1,0 +1,22 @@
+﻿@using Rise.Shared.Tenturncards
+
+@if (RittenKaarten == null || !RittenKaarten.Any())
+{
+    <p>Geen rittenkaarten beschikbaar.</p>
+}
+else
+{
+    <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 mb-plus:grid-cols-3 lg-plus:grid-cols-4 pl-4">
+        @foreach (var kaart in RittenKaarten)
+        {
+            <li>
+                <Tenturncard KaartData="kaart" />
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public required List<TenturncardDto> RittenKaarten { get; set; }
+}

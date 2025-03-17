@@ -1,0 +1,52 @@
+﻿@using Rise.Client.events
+@using Rise.Shared.Events
+@using Rise.Client.Util
+@inject NavigationManager Navigation
+
+<div class="p-5">
+    <div class="border-b border-gray-300 mb-4">
+        <h6 class="text-lg font-semibold">Programma @Event.Date</h6> 
+    </div>
+
+
+    <div id="showtimes-section" class="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+        <table class="w-full">
+            <tbody>
+                @foreach (var cinema in CinemaNames)
+                {
+                    var eventCinema = Event.Cinemas.FirstOrDefault(c => c.Name.Equals(cinema, StringComparison.OrdinalIgnoreCase));
+
+                    <tr class="cinema-item">
+                        <td class="cinema-name font-bold text-left">@cinema</td>
+                        <td class="cinema-showtimes min-w-[200px] text-left">
+                            @if (eventCinema != null && eventCinema.Showtimes.Any())
+                            {
+                               
+                                <EventShowtimes CinemaData="@eventCinema" EventId="@Event.Id" />
+                            }
+                            else
+                            {
+                                <span class="no-showtimes ml-1 text-gray-500 italic text-sm">
+                                    - Niet beschikbaar
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    [Parameter , EditorRequired]
+    public required EventDto Event { get; set; }
+
+    private List<string> CinemaNames = new List<string>
+    {
+        "Brugge",
+        "Mechelen",
+        "Antwerpen",
+        "Cinema Cartoons"
+    };
+}

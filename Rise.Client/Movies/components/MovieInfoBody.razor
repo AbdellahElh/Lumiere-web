@@ -1,0 +1,81 @@
+﻿@using Rise.Client.Movies
+@using Rise.Shared.Movies
+@using Rise.Client.Util
+@inject NavigationManager Navigation
+
+
+<div class="p-5">
+        @if (Event != null)
+        {
+            <div class="mt-10 mb-2 mr-0  rounded-md overflow-hidden shadow-lg relative bg-cover bg-center " style="background-image: url('@Event.Cover');">
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                <div class="relative p-4 text-white">
+                    <h5 class="text-lg font-extrabold opacity-90">Speciale Event: @Event.Type</h5>
+                    <h5 class="text-xl font-bold mt-16">@Event.Title</h5>
+                    <div class="flex flex-col md:flex-row md:justify-between mt-2 space-y-3 md:space-y-0">
+                        <p class="text-sm leading-6 mt-2 w-[100%] md:w-[60%]">@Event.Description</p>
+                        <div class="mt-6 self-end">
+                            <button class="bg-gray-500 bg-opacity-75 hover:bg-opacity-100 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out" @onclick="NavigateToEvent">
+                                Bekijk Event
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    
+    <div class="border-b border-gray-300 mb-4">
+        <h6 class="text-lg font-semibold">Vandaag</h6>
+    </div>
+
+
+    <div id="showtimes-section" class="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+        <table class="w-full">
+            <tbody>
+                @foreach (var cinema in CinemaNames)
+                {
+                    var movieCinema = Movie.Cinemas.FirstOrDefault(c => c.Name.Equals(cinema, StringComparison.OrdinalIgnoreCase));
+
+                    <tr class="cinema-item">
+                        <td class="cinema-name font-bold text-left">@cinema</td>
+                        <td class="cinema-showtimes min-w-[200px] text-left">
+                            @if (movieCinema != null && movieCinema.Showtimes.Any())
+                            {
+                                <MovieShowtimes CinemaData="@movieCinema" MovieId="@Movie.Id" />
+                            }
+                            else
+                            {
+                                <span class="no-showtimes ml-1 text-gray-500 italic text-sm">
+                                    - Niet beschikbaar
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Rise.Shared.Events.EventDto? Event { get; set; }
+
+    private void NavigateToEvent()
+    {
+        if (Event != null)
+        {
+            Navigation.NavigateTo($"/events/{Event.Id}");
+        }
+    }
+    [Parameter , EditorRequired]
+    public required MovieDto Movie { get; set; }
+
+    private List<string> CinemaNames = new List<string>
+    {
+        "Brugge",
+        "Mechelen",
+        "Antwerpen",
+        "Cinema Cartoons"
+    };
+}

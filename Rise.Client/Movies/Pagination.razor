@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Components
+
+<div class="pagination flex items-center justify-center mb-3 space-x-2">
+    <button @onclick="OnPrevious" disabled="@(!CanPrevious)"
+            class="text-2xl transition duration-300 ease-in-out hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+        &#x2B05;
+    </button>
+    @for (int pageX = 1; pageX <= TotalPages; pageX++)
+    {
+        var currentPage = pageX;
+        <button @onclick="() => OnPageSelected.InvokeAsync(currentPage)"
+                class="@GetButtonClass(currentPage)">
+            @currentPage
+        </button>
+    }
+    <button @onclick="OnNext" disabled="@(!CanNext)"
+            class="text-2xl transition duration-300 ease-in-out hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+        &#x27A1;
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public EventCallback OnPrevious { get; set; }
+
+    [Parameter]
+    public EventCallback OnNext { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageSelected { get; set; }
+
+    private bool CanPrevious => CurrentPage > 1;
+    private bool CanNext => CurrentPage < TotalPages;
+
+    private string GetButtonClass(int pageX)
+    {
+        const string baseClass = "px-3 py-1 rounded-lg transition duration-300 ease-in-out font-semibold";
+        return pageX == CurrentPage
+            ? $"{baseClass} bg-gray-800 text-white"
+            : $"{baseClass} bg-gray-200 text-gray-800 hover:bg-gray-300";
+    }
+}
