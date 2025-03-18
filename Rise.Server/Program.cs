@@ -27,17 +27,22 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 Log.Information("Starting web application");
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Serilog
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .ReadFrom.Services(services)
     .Enrich.FromLogContext()
     .WriteTo.Console());
 
+// Basic services
 builder.Services.AddSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger / OpenAPI setup
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -68,32 +73,47 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// 1) Read the UsePostgres flag from configuration
+var usePostgres = builder.Configuration.GetValue<bool>("UsePostgres");
+
+// 2) Conditionally choose which database to use
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseMySql(
-           builder.Configuration.GetConnectionString("MariaDb"),
-           new MariaDbServerVersion(new Version(11, 5)) 
-       ); 
+    if (usePostgres)
+    {
+        // Use PostgreSQL (e.g., on Neon)
+        // Make sure you have installed Npgsql.EntityFrameworkCore.PostgreSQL
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString("PostgresDb")
+        );
+    }
+    else
+    {
+        // Default to MariaDB (local dev)
+        options.UseMySql(
+            builder.Configuration.GetConnectionString("MariaDb"),
+            new MariaDbServerVersion(new Version(11, 5))
+        );
+    }
+
+    // Common EF Core options
     options.EnableDetailedErrors();
     options.EnableSensitiveDataLogging();
-    options.UseTriggers(options => options.AddTrigger<EntityBeforeSaveTrigger>());
+    options.UseTriggers(triggers => triggers.AddTrigger<EntityBeforeSaveTrigger>());
 });
 
-
+// Register your services
 builder.Services.AddScoped<IMovieService, MovieService>();
-
 builder.Services.AddScoped<IEventService, EventService>();
-
 builder.Services.AddScoped<IWatchlistService, WatchListService>();
-
 builder.Services.AddScoped<IAccountService, AccountService>();
-
 builder.Services.AddScoped<ITenturncardService, TenturncardService>();
-
+builder.Services.AddScoped<ITicketService, TicketService>();
 
 builder.Services.AddHttpContextAccessor()
                 .AddScoped<IAuthContextProvider, HttpContextAuthProvider>();
 
+// Auth setup
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -108,6 +128,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Auth0
 builder.Services.AddAuth0AuthenticationClient(config =>
 {
     config.Domain = builder.Configuration["Auth0:Authority"]!;
@@ -116,23 +137,10 @@ builder.Services.AddAuth0AuthenticationClient(config =>
 });
 builder.Services.AddAuth0ManagementClient().AddManagementAccessToken();
 
-builder.Services.AddScoped<IAccountService, AccountService>();
-
-builder.Services.AddScoped<IMovieService, MovieService>();//movies
-
-builder.Services.AddScoped<IWatchlistService, WatchListService>();
-
-builder.Services.AddScoped<ITenturncardService, TenturncardService>();
-
-builder.Services.AddScoped<ITicketService, TicketService>();
-
-builder.Services.AddHttpContextAccessor()
-                .AddScoped<IAuthContextProvider, HttpContextAuthProvider>();
-
-
+// Build the app
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Development-only swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -145,9 +153,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
-
 app.UseHttpsRedirection();
 
+// Blazor + static files
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
@@ -160,28 +168,14 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-if (app.Environment.IsDevelopment())
+// Seed the database in Development or Production if you want
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
-    using (var scope = app.Services.CreateScope())
-    { // Require a DbContext from the service provider and seed the database.
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        Seeder seeder = new(dbContext);
-        seeder.Seed();
-    }
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    Seeder seeder = new(dbContext);
+    seeder.Seed();
 }
-if (app.Environment.IsProduction())
-{
-    using (var scope = app.Services.CreateScope())
-    { // Require a DbContext from the service provider and seed the database.
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        Seeder seeder = new(dbContext);
-        seeder.Seed();
-    }
-}
-
-
-
-
 
 app.Run();
 
