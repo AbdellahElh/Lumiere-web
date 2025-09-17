@@ -176,8 +176,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    Seeder seeder = new(dbContext);
-    seeder.Seed();
+    // Temporarily disabled seeder to test database connectivity
+    // Seeder seeder = new(dbContext);
+    // seeder.Seed();
 }
 
 app.Run();
