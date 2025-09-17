@@ -51,7 +51,7 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IEventService, EventService>();
 
-// Get API base URL from configuration
+// Get API base URL from configuration (pointing to Render backend)
 var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? $"{builder.HostEnvironment.BaseAddress}api/";
 
 builder.Services.AddHttpClient("Gent5API", client => client.BaseAddress = new Uri(apiBaseUrl))
