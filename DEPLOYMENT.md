@@ -1,6 +1,7 @@
 # Free Deployment Guide - Render + Vercel + Supabase
 
 ## 🎯 **Recommended Free Stack:**
+
 - **Backend**: Render (750 hours/month free tier)
 - **Frontend**: Vercel (unlimited static hosting)
 - **Database**: Supabase PostgreSQL (500MB free tier)
@@ -26,6 +27,7 @@
 2. Click **"New +"** → **"Web Service"**
 3. Select your `Lumiere-web` repository
 4. Configure the service:
+
    - **Name**: `lumiere-backend`
    - **Environment**: `Docker` (will auto-detect `render.yaml`)
    - **Plan**: `Free`
@@ -44,8 +46,9 @@
 
 1. Go to [vercel.com](https://vercel.com) and import your GitHub repository
 2. Configure build settings:
+
    - **Framework Preset**: `Other`
-   - **Build Command**: 
+   - **Build Command**:
      ```bash
      cd Rise.Client && npm install && npm run build:css && cd .. && dotnet publish Rise.Client/Rise.Client.csproj -c Release -o ./wwwroot
      ```
@@ -92,6 +95,7 @@ Run the deployment script:
 ```
 
 This script will:
+
 1. Build TailwindCSS assets
 2. Build the .NET application
 3. Provide step-by-step deployment instructions
@@ -99,18 +103,21 @@ This script will:
 ## Free Tier Limitations
 
 ### Render Free Tier
+
 - **750 hours/month** (about 31 days if always running)
 - **Service sleeps after 15 minutes** of inactivity
 - **512MB RAM**, 0.1 CPU
 - Cold start time: ~30 seconds
 
 ### Vercel Free Tier
+
 - **Unlimited static hosting**
 - **100 deployments/day**
 - **100GB bandwidth/month**
 - No cold starts for static content
 
 ### Supabase Free Tier
+
 - **500MB database**
 - **50MB file storage**
 - **2 projects maximum**
@@ -126,16 +133,19 @@ This script will:
 ## Troubleshooting
 
 ### Backend Issues
+
 - Check Render logs in dashboard
 - Verify environment variables are set
 - Ensure Supabase connection string is correct
 
-### Frontend Issues  
+### Frontend Issues
+
 - Check Vercel build logs
 - Verify TailwindCSS builds correctly
 - Ensure backend URL is configured
 
 ### Database Issues
+
 - Check Supabase project status
 - Verify connection details
 - Run migrations if needed
@@ -151,12 +161,12 @@ The following files are configured for production:
 
 ## Cost Breakdown
 
-| Service | Plan | Cost | Limitations |
-|---------|------|------|-------------|
-| Render | Free | $0/month | 750 hours, sleeps after 15min |
-| Vercel | Hobby | $0/month | 100GB bandwidth |
-| Supabase | Free | $0/month | 500MB database |
-| **Total** | | **$0/month** | |
+| Service   | Plan  | Cost         | Limitations                   |
+| --------- | ----- | ------------ | ----------------------------- |
+| Render    | Free  | $0/month     | 750 hours, sleeps after 15min |
+| Vercel    | Hobby | $0/month     | 100GB bandwidth               |
+| Supabase  | Free  | $0/month     | 500MB database                |
+| **Total** |       | **$0/month** |                               |
 
 ## Scaling Options
 
@@ -167,18 +177,18 @@ When you outgrow the free tiers:
 - **Supabase**: $25/month for Pro plan
 
 All services provide seamless upgrading without downtime.
-    paths:
-      [
-        "Rise.Server/**",
-        "Rise.Services/**",
-        "Rise.Domain/**",
-        "Rise.Persistence/**",
-        "Rise.Shared/**",
-      ]
+paths:
+[
+"Rise.Server/**",
+"Rise.Services/**",
+"Rise.Domain/**",
+"Rise.Persistence/**",
+"Rise.Shared/**",
+]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+deploy:
+runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -203,7 +213,8 @@ jobs:
           app-name: "lumiere-backend"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{env.DOTNET_ROOT}}/myapp
-```
+
+````
 
 ### Step 2: Setup Free Database
 
@@ -215,7 +226,7 @@ az sql server create --name lumiere-sql --resource-group lumiere-rg --location "
 
 # Create database (Basic tier - essentially free for small apps)
 az sql db create --name lumiere-db --server lumiere-sql --resource-group lumiere-rg --edition Basic --compute-model Provisioned --family Gen5 --capacity 5
-```
+````
 
 #### Option B: Supabase (Recommended for simplicity)
 
