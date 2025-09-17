@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: lumiere-backend
+    env: dotnet
+    plan: free
+    buildCommand: |
+      cd Rise.Client
+      npm install
+      npm run build:css
+      cd ..
+      dotnet restore
+      dotnet build -c Release
+      dotnet publish Rise.Server/Rise.Server.csproj -c Release -o ./publish
+    startCommand: dotnet ./publish/Rise.Server.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:10000
+      - key: SUPABASE_DB_HOST
+        sync: false
+      - key: SUPABASE_DB_NAME
+        sync: false
+      - key: SUPABASE_DB_USER
+        sync: false
+      - key: SUPABASE_DB_PASSWORD
+        sync: false
+    healthCheckPath: /health
