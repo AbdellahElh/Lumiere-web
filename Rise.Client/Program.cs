@@ -51,41 +51,44 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IEventService, EventService>();
 
-builder.Services.AddHttpClient("Gent5API", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress + "api/"))
+// Get API base URL from configuration
+var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? $"{builder.HostEnvironment.BaseAddress}api/";
+
+builder.Services.AddHttpClient("Gent5API", client => client.BaseAddress = new Uri(apiBaseUrl))
        .AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
        .AddHttpMessageHandler<CleanErrorHandler>();
 
 
 builder.Services.AddHttpClient<IMovieService, Rise.Client.Movies.services.MovieService>(client =>
 {
-    client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CleanErrorHandler>();
 
 builder.Services.AddHttpClient<IEventService, EventService>(client =>
 {
-    client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CleanErrorHandler>();
 
 builder.Services.AddHttpClient<IAccountService, AccountService>(client =>
 {
-    client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CleanErrorHandler>();
 
 builder.Services.AddHttpClient<ITenturncardService, TenturncardService>(client =>
 {
-    client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
   .AddHttpMessageHandler<CleanErrorHandler>();
 
   builder.Services.AddHttpClient<IWatchlistService, WatchListService>(client =>
 {
-    client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
   .AddHttpMessageHandler<CleanErrorHandler>();
 
 builder.Services.AddHttpClient<ITicketService, TicketService>(client =>
 {
-    client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
   .AddHttpMessageHandler<CleanErrorHandler>();
 
