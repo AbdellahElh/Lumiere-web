@@ -1,12 +1,6 @@
 {
-  "name": "lumiere-frontend",
-  "version": "0.1.0",
-  "builds": [
-    {
-      "src": "wwwroot/**",
-      "use": "@vercel/static"
-    }
-  ],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "routes": [
     {
       "src": "/(.*)\\.(js|css|wasm|json|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)",
@@ -18,10 +12,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "functions": {
-    "wwwroot/**": {
-      "runtime": "static"
-    }
-  }
+  ]
 }
