@@ -402,3 +402,4 @@ FodyWeavers.xsd
 Rise.Client/wwwroot/css/app.min.css
 
 Rise.Server/secrets.json
+.vercel
