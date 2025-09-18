@@ -1,4 +1,7 @@
 {
+  "buildCommand": "cd Rise.Client && npm install && npm run build:css && cd .. && dotnet publish Rise.Client/Rise.Client.csproj -c Release -o ./blazor-output && mkdir -p dist && cp -r ./blazor-output/wwwroot/* ./dist/",
+  "outputDirectory": "dist",
+  "installCommand": "echo 'Using custom build command'",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [

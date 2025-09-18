@@ -45,7 +45,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
 
 
 // Register the services
-builder.Services.AddScoped<IWatchlistService, WatchListService>(); 
+builder.Services.AddScoped<IWatchlistService, WatchListService>();
 builder.Services.AddScoped<ITenturncardService, TenturncardService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
@@ -80,11 +80,11 @@ builder.Services.AddHttpClient<ITenturncardService, TenturncardService>(client =
 }).AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
   .AddHttpMessageHandler<CleanErrorHandler>();
 
-  builder.Services.AddHttpClient<IWatchlistService, WatchListService>(client =>
+builder.Services.AddHttpClient<IWatchlistService, WatchListService>(client =>
 {
-    client.BaseAddress = new Uri(apiBaseUrl);
+  client.BaseAddress = new Uri(apiBaseUrl);
 }).AddHttpMessageHandler<CustomAuthorizationMessageHandler>()
-  .AddHttpMessageHandler<CleanErrorHandler>();
+.AddHttpMessageHandler<CleanErrorHandler>();
 
 builder.Services.AddHttpClient<ITicketService, TicketService>(client =>
 {
