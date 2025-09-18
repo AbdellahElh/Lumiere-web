@@ -1,4 +1,6 @@
-# Rise - [GROUPNAME]
+# Rise - Lumiere Web Application
+
+<!-- Trigger deployment test -->
 
 ## Team Members
 
