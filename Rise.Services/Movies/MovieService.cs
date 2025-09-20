@@ -37,7 +37,7 @@ public class MovieService : IMovieService
             movies = await dbContext.Movies
       .Where(m => string.IsNullOrEmpty(title) || m.Title.ToLower().Contains(title))
       .Include(m => m.Cinemas.Where(c => selectedCinemas.Any() ? selectedCinemas.Contains(c.Name) : true))
-      .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || s.ShowTime.Date == selectedDate.Value.Date))
+      .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || DateOnly.FromDateTime(s.ShowTime) == DateOnly.FromDateTime(selectedDate.Value)))
      .ToListAsync();
         }
         else
@@ -45,7 +45,7 @@ public class MovieService : IMovieService
             movies = await dbContext.Movies
            .Where(m => string.IsNullOrEmpty(title) || m.Title.ToLower().Contains(title))
            .Include(m => m.Cinemas.Where(c => selectedCinemas.Any() ? selectedCinemas.Contains(c.Name) : true))
-           .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || s.ShowTime.Date == selectedDate.Value.Date))
+           .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || DateOnly.FromDateTime(s.ShowTime) == DateOnly.FromDateTime(selectedDate.Value)))
            .Skip((pageNumber - 1) * pageSize)
            .Take(pageSize)
            .ToListAsync();
@@ -77,7 +77,7 @@ public class MovieService : IMovieService
                     Name = cinema.Name,
                     Showtimes = cinema.Showtimes
                        .Where(showtime => showtime.MovieId == movie.Id
-                        && (!selectedDate.HasValue || showtime.ShowTime.Date == selectedDate.Value.Date))
+                        && (!selectedDate.HasValue || DateOnly.FromDateTime(showtime.ShowTime) == DateOnly.FromDateTime(selectedDate.Value)))
                         .Select(showtime => showtime.ShowTime)
                         .ToList()
                 })
@@ -95,7 +95,7 @@ public class MovieService : IMovieService
 
     public async Task<MovieEventDto> GetMovieByIdAsync(int id)
     {
-        var today = DateTime.Today;
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var movie = await dbContext.Movies
             .Include(m => m.Cinemas)
@@ -134,7 +134,7 @@ public class MovieService : IMovieService
                     id = cinema.Id,
                     Name = cinema.Name,
                     Showtimes = cinema.Showtimes
-                        .Where(showtime => showtime.MovieId == movie.Id && showtime.ShowTime.Date == today)
+                        .Where(showtime => showtime.MovieId == movie.Id && DateOnly.FromDateTime(showtime.ShowTime) == today)
                         .Select(showtime => showtime.ShowTime)
                         .ToList()
                 })
@@ -166,9 +166,10 @@ public class MovieService : IMovieService
 
     public async Task<List<MoviePosterDto>> GetRecentMoviePostersAsync()
     {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var movies = await dbContext.Movies
             .OrderByDescending(m => m.ReleaseDate)
-            .Where(m => m.ReleaseDate <= DateTime.Today) //past
+            .Where(m => DateOnly.FromDateTime(m.ReleaseDate) <= today) //past
             .Select(m => new MoviePosterDto
             {
                 Id = m.Id,
@@ -183,9 +184,10 @@ public class MovieService : IMovieService
 
     public async Task<List<MoviePosterDto>> GetFutureMoviePostersAsync()
     {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var movies = await dbContext.Movies
             .OrderByDescending(m => m.ReleaseDate)
-            .Where(m => m.ReleaseDate >= DateTime.Today) //future
+            .Where(m => DateOnly.FromDateTime(m.ReleaseDate) >= today) //future
             .Select(m => new MoviePosterDto
             {
                 Id = m.Id,
