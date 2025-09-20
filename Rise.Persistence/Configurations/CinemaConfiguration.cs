@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Rise.Persistence.Configurations;
 
-internal class WatchlistConfiguration : EntityConfiguration<Cinema>
+internal class CinemaConfiguration : EntityConfiguration<Cinema>
 {
     public override void Configure(EntityTypeBuilder<Cinema> builder)
     {
