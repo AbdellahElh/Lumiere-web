@@ -182,10 +182,8 @@ public class MovieService : IMovieService
 
     public async Task<List<MoviePosterDto>> GetFutureMoviePostersAsync()
     {
-        var today = DateTime.UtcNow.Date;
         var movies = await dbContext.Movies
             .OrderByDescending(m => m.ReleaseDate)
-            .Where(m => m.ReleaseDate.Date >= today) //future
             .Select(m => new MoviePosterDto
             {
                 Id = m.Id,
