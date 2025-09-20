@@ -78,4 +78,18 @@ public class MovieController : ControllerBase
         return Ok(movies);
     }
 
+    [HttpGet("simple")]
+    public async Task<ActionResult<IEnumerable<object>>> GetSimpleMovies()
+    {
+        try
+        {
+            var movies = await movieService.GetSimpleMoviesAsync();
+            return Ok(movies);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message, stackTrace = ex.StackTrace });
+        }
+    }
+
 }

@@ -216,6 +216,21 @@ public class MovieService : IMovieService
         return movies;
     }
 
+    public async Task<List<object>> GetSimpleMoviesAsync()
+    {
+        var movies = await dbContext.Movies
+            .Select(m => new 
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description
+            })
+            .Take(5)
+            .ToListAsync();
+
+        return movies.Cast<object>().ToList();
+    }
+
 }
 public class MockData
 {

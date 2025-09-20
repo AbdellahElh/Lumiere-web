@@ -13,5 +13,7 @@ public interface IMovieService
 
     Task<List<MoviePosterDto>> GetFutureMoviePostersAsync();
 
+    Task<List<object>> GetSimpleMoviesAsync();
+
 
 }
