@@ -171,7 +171,7 @@ public class MovieService : IMovieService
             {
                 Id = m.Id,
                 Cover = m.CoverImageUrl!,
-                ReleaseDate = m.ReleaseDate,
+                ReleaseDate = DateTime.MinValue,
 
             })
             .ToListAsync();
