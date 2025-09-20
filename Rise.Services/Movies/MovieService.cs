@@ -167,7 +167,6 @@ public class MovieService : IMovieService
     public async Task<List<MoviePosterDto>> GetRecentMoviePostersAsync()
     {
         var movies = await dbContext.Movies
-            .OrderByDescending(m => m.ReleaseDate)
             .Select(m => new MoviePosterDto
             {
                 Id = m.Id,
