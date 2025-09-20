@@ -37,7 +37,7 @@ public class MovieService : IMovieService
             movies = await dbContext.Movies
       .Where(m => string.IsNullOrEmpty(title) || m.Title.ToLower().Contains(title))
       .Include(m => m.Cinemas.Where(c => selectedCinemas.Any() ? selectedCinemas.Contains(c.Name) : true))
-      .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || s.ShowTime.Date == selectedDate.Value.Date))
+      .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue))
      .ToListAsync();
         }
         else
@@ -45,7 +45,7 @@ public class MovieService : IMovieService
             movies = await dbContext.Movies
            .Where(m => string.IsNullOrEmpty(title) || m.Title.ToLower().Contains(title))
            .Include(m => m.Cinemas.Where(c => selectedCinemas.Any() ? selectedCinemas.Contains(c.Name) : true))
-           .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || s.ShowTime.Date == selectedDate.Value.Date))
+           .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue))
            .Skip((pageNumber - 1) * pageSize)
            .Take(pageSize)
            .ToListAsync();
@@ -76,10 +76,10 @@ public class MovieService : IMovieService
                     id = cinema.Id,
                     Name = cinema.Name,
                     Showtimes = cinema.Showtimes
-                       .Where(showtime => showtime.MovieId == movie.Id
-                        && (!selectedDate.HasValue || showtime.ShowTime.Date == selectedDate.Value.Date))
-                        .Select(showtime => showtime.ShowTime)
-                        .ToList()
+                       .Where(showtime => showtime.MovieId == movie.Id)
+                       .Where(showtime => !selectedDate.HasValue || showtime.ShowTime.Date == selectedDate.Value.Date)
+                       .Select(showtime => showtime.ShowTime)
+                       .ToList()
                 })
                 .Where(cinema => cinema.Showtimes.Any())
                 .ToList()
@@ -95,8 +95,6 @@ public class MovieService : IMovieService
 
     public async Task<MovieEventDto> GetMovieByIdAsync(int id)
     {
-        var today = DateTime.UtcNow.Date;
-
         var movie = await dbContext.Movies
             .Include(m => m.Cinemas)
             .ThenInclude(c => c.Showtimes)
@@ -112,6 +110,9 @@ public class MovieService : IMovieService
             .Include(m => m.Cinemas)
             .ThenInclude(c => c.Showtimes)
             .FirstOrDefaultAsync(m => m.Id == EventId);
+
+        // Filter showtimes by today's date in memory to avoid PostgreSQL timezone issues
+        var today = DateTime.UtcNow.Date;
 
         var movieDto = new MovieDto
         {
@@ -166,33 +167,36 @@ public class MovieService : IMovieService
 
     public async Task<List<MoviePosterDto>> GetRecentMoviePostersAsync()
     {
+        // Simplified query without date comparisons to avoid PostgreSQL timezone issues
         var movies = await dbContext.Movies
-            .Select(m => new MoviePosterDto
-            {
-                Id = m.Id,
-                Cover = m.CoverImageUrl!,
-                ReleaseDate = DateTime.MinValue,
-
-            })
-            .ToListAsync();
-
-        return movies;
-    }
-
-    public async Task<List<MoviePosterDto>> GetFutureMoviePostersAsync()
-    {
-        var movies = await dbContext.Movies
-            .OrderByDescending(m => m.ReleaseDate)
             .Select(m => new MoviePosterDto
             {
                 Id = m.Id,
                 Cover = m.CoverImageUrl!,
                 ReleaseDate = m.ReleaseDate,
-
             })
             .ToListAsync();
 
-        return movies;
+        // Filter by date in memory to avoid PostgreSQL timezone issues
+        var today = DateTime.UtcNow.Date;
+        return movies.Where(m => m.ReleaseDate.Date <= today).OrderByDescending(m => m.ReleaseDate).ToList();
+    }
+
+    public async Task<List<MoviePosterDto>> GetFutureMoviePostersAsync()
+    {
+        // Simplified query without date comparisons to avoid PostgreSQL timezone issues
+        var movies = await dbContext.Movies
+            .Select(m => new MoviePosterDto
+            {
+                Id = m.Id,
+                Cover = m.CoverImageUrl!,
+                ReleaseDate = m.ReleaseDate,
+            })
+            .ToListAsync();
+
+        // Filter by date in memory to avoid PostgreSQL timezone issues
+        var today = DateTime.UtcNow.Date;
+        return movies.Where(m => m.ReleaseDate.Date >= today).OrderByDescending(m => m.ReleaseDate).ToList();
     }
 
     public async Task<List<MovieBannerDto>> GetMovieBannersAsync()

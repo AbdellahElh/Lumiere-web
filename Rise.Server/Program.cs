@@ -84,8 +84,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         // Use PostgreSQL (e.g., on Neon)
         // Make sure you have installed Npgsql.EntityFrameworkCore.PostgreSQL
         options.UseNpgsql(
-            builder.Configuration.GetConnectionString("PostgresDb")
+            builder.Configuration.GetConnectionString("PostgresDb"),
+            npgsqlOptions => npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
         );
+        
+        // Configure PostgreSQL to use UTC timestamps to avoid timezone issues
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
     else
     {
