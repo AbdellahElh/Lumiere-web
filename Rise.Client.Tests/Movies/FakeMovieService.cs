@@ -107,4 +107,14 @@ internal class FakeMovieService : IMovieService
         };
         return Task.FromResult(moviePosters);
     }
+
+    public Task<List<object>> GetSimpleMoviesAsync()
+    {
+        var simpleMovies = new List<object>
+        {
+            new { Id = 1, Title = "Test Movie 1", Description = "A test movie" },
+            new { Id = 2, Title = "Test Movie 2", Description = "Another test movie" },
+        };
+        return Task.FromResult(simpleMovies);
+    }
 }
