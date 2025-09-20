@@ -73,4 +73,10 @@ public class MovieService : IMovieService
         var movies = await httpClient.GetFromJsonAsync<List<MoviePosterDto>>("Movie/future-posters");
         return movies ?? new List<MoviePosterDto>();
     }
+
+    public async Task<List<object>> GetSimpleMoviesAsync()
+    {
+        var movies = await httpClient.GetFromJsonAsync<List<object>>("Movie/simple");
+        return movies ?? new List<object>();
+    }
 }
