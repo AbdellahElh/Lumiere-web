@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using Rise.Domain.Movies;
 using Rise.Persistence;
 using Rise.Shared.Movies;
@@ -35,13 +34,13 @@ public class MovieService : IMovieService
 
         if(filters.pageNumber == null){
               movies = await dbContext.Movies
-        .Where(m => string.IsNullOrEmpty(title) || EF.Functions.Like(m.Title.ToLower(), $"%{title}%"))
+        .Where(m => string.IsNullOrEmpty(title) || m.Title.ToLower().Contains(title))
         .Include(m => m.Cinemas.Where(c => selectedCinemas.Any() ? selectedCinemas.Contains(c.Name) : true))
         .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || s.ShowTime.Date == selectedDate.Value.Date))
        .ToListAsync();
         }else{
              movies = await dbContext.Movies
-            .Where(m => string.IsNullOrEmpty(title) || EF.Functions.Like(m.Title.ToLower(), $"%{title}%"))
+            .Where(m => string.IsNullOrEmpty(title) || m.Title.ToLower().Contains(title))
             .Include(m => m.Cinemas.Where(c => selectedCinemas.Any() ? selectedCinemas.Contains(c.Name) : true))
             .ThenInclude(c => c.Showtimes.Where(s => !selectedDate.HasValue || s.ShowTime.Date == selectedDate.Value.Date))
             .Skip((pageNumber - 1) * pageSize)

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
 using Rise.Domain.Events;
 using Rise.Persistence;
 using Rise.Shared.Events;
